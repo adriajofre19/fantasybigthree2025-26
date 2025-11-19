@@ -1,0 +1,1636 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar";
+import { getSupabaseClient } from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
+
+// Check if user is authenticated
+const supabase = await getSupabaseClient(Astro.cookies);
+const { data: { user } } = await supabase.auth.getUser();
+const isAuthenticated = !!user;
+---
+
+<Layout title="Fantasy Big Three - Home">
+	<Navbar client:load />
+	{isAuthenticated ? (
+		<main class="min-h-screen bg-background py-8">
+		<div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+			<div class="mb-6 sm:mb-8">
+				
+				<h1 class="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-left text-5xl leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10">
+					Fantasy Big Three
+				</h1>
+				<p class="text-sm sm:text-base text-muted-foreground">
+					Selecciona els teus jugadors titulars i suplents
+				</p>
+			</div>
+
+			<!-- Pista de bàsquet per als titulars -->
+			<div class="mb-8 sm:mb-10 md:mb-12">
+				<h2 class="text-xl sm:text-2xl mb-3 sm:mb-4">
+					Titulars
+				</h2>
+				<div class="basketball-court">
+					<!-- Cistella i línia de tirs lliures -->
+					<div class="court-container">
+						<!-- Àrea gran (paint) -->
+						<div class="paint-area"></div>
+
+						<!-- Cistella -->
+						<div class="hoop">
+							<div class="backboard"></div>
+							<div class="hoop-ring"></div>
+						</div>
+
+						<!-- Línia de tirs lliures -->
+						<div class="free-throw-line"></div>
+
+						<!-- Cercle de tirs lliures -->
+						<div class="free-throw-circle"></div>
+
+						<!-- Línia de 3 punts -->
+						<div class="three-point-line"></div>
+
+						<!-- Posicions dels titulars -->
+						<div
+							class="player-position pg"
+							data-position="PG"
+							data-slot-index="0"
+						>
+							<div class="player-slot">
+								<span class="position-label">PG</span>
+								<span class="player-name" id="starter-0">-</span
+								>
+								<img
+									class="player-photo"
+									id="starter-photo-0"
+									src=""
+									alt=""
+									style="display: none;"
+								/>
+							</div>
+						</div>
+
+						<div
+							class="player-position sg"
+							data-position="SG"
+							data-slot-index="1"
+						>
+							<div class="player-slot">
+								<span class="position-label">SG</span>
+								<span class="player-name" id="starter-1">-</span
+								>
+								<img
+									class="player-photo"
+									id="starter-photo-1"
+									src=""
+									alt=""
+									style="display: none;"
+								/>
+							</div>
+						</div>
+
+						<div
+							class="player-position sf"
+							data-position="SF"
+							data-slot-index="2"
+						>
+							<div class="player-slot">
+								<span class="position-label">SF</span>
+								<span class="player-name" id="starter-2">-</span
+								>
+								<img
+									class="player-photo"
+									id="starter-photo-2"
+									src=""
+									alt=""
+									style="display: none;"
+								/>
+							</div>
+						</div>
+
+						<div
+							class="player-position pf"
+							data-position="PF"
+							data-slot-index="3"
+						>
+							<div class="player-slot">
+								<span class="position-label">PF</span>
+								<span class="player-name" id="starter-3">-</span
+								>
+								<img
+									class="player-photo"
+									id="starter-photo-3"
+									src=""
+									alt=""
+									style="display: none;"
+								/>
+							</div>
+						</div>
+
+						<div
+							class="player-position c"
+							data-position="C"
+							data-slot-index="4"
+						>
+							<div class="player-slot">
+								<span class="position-label">C</span>
+								<span class="player-name" id="starter-4">-</span
+								>
+								<img
+									class="player-photo"
+									id="starter-photo-4"
+									src=""
+									alt=""
+									style="display: none;"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Zona de suplents -->
+			<div id="bench-section" style="display: none;">
+				<h2 class="text-xl sm:text-2xl mb-3 sm:mb-4">
+					Suplents
+				</h2>
+				<div class="bench-container">
+					<div class="bench-grid" id="bench-grid">
+						<!-- Slots de suplents es crearan dinàmicament -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	) : (
+		<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+			<!-- Hero Section -->
+			<section class="text-center mb-16">
+				<h1
+					class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent"
+				>
+					Fantasy Big Three
+				</h1>
+				<p
+					class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+				>
+					Construïx el teu equip de somni amb els millors jugadors de la
+					NBA temporada 2025-2026
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="/mercado">
+						<Button size="lg" className="w-full sm:w-auto" client:load>
+							Començar a Jugar
+						</Button>
+					</a>
+					<a href="/about">
+						<Button
+							size="lg"
+							variant="outline"
+							className="w-full sm:w-auto"
+							client:load
+						>
+							Més Informació
+						</Button>
+					</a>
+				</div>
+			</section>
+
+			<!-- Features Section -->
+			<section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+				<div
+					class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+				>
+					<div class="text-4xl mb-4">🏀</div>
+					<h2 class="text-xl font-semibold mb-2">Compra Jugadors</h2>
+					<p class="text-muted-foreground">
+						Explora el mercat i compra els millors jugadors de la NBA
+						per formar el teu equip.
+					</p>
+				</div>
+				<div
+					class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+				>
+					<div class="text-4xl mb-4">⭐</div>
+					<h2 class="text-xl font-semibold mb-2">Equip Titular</h2>
+					<p class="text-muted-foreground">
+						Els primers 5 jugadors que compris seran automàticament els
+						teus titulars.
+					</p>
+				</div>
+				<div
+					class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+				>
+					<div class="text-4xl mb-4">💰</div>
+					<h2 class="text-xl font-semibold mb-2">Gestiona el Saldo</h2>
+					<p class="text-muted-foreground">
+						Gestiona el teu pressupost i construeix l'equip perfecte amb
+						els recursos disponibles.
+					</p>
+				</div>
+			</section>
+
+			<!-- How to Play Section -->
+			<section class="bg-card border border-border rounded-lg p-8 mb-16">
+				<h2 class="text-3xl font-bold mb-6 text-center">Com Jugar</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="flex gap-4">
+						<div
+							class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+						>
+							1
+						</div>
+						<div>
+							<h3 class="font-semibold mb-2">Inicia Sessió</h3>
+							<p class="text-muted-foreground">
+								Fes login amb Google per començar a jugar i obtenir
+								el teu saldo inicial.
+							</p>
+						</div>
+					</div>
+					<div class="flex gap-4">
+						<div
+							class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+						>
+							2
+						</div>
+						<div>
+							<h3 class="font-semibold mb-2">Explora el Mercat</h3>
+							<p class="text-muted-foreground">
+								Visita el mercat per veure tots els jugadors
+								disponibles i els seus preus.
+							</p>
+						</div>
+					</div>
+					<div class="flex gap-4">
+						<div
+							class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+						>
+							3
+						</div>
+						<div>
+							<h3 class="font-semibold mb-2">Compra Jugadors</h3>
+							<p class="text-muted-foreground">
+								Selecciona els jugadors que vols i compra'ls per
+								afegir-los al teu equip.
+							</p>
+						</div>
+					</div>
+					<div class="flex gap-4">
+						<div
+							class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+						>
+							4
+						</div>
+						<div>
+							<h3 class="font-semibold mb-2">
+								Gestiona el Teu Equip
+							</h3>
+							<p class="text-muted-foreground">
+								Els primers 5 jugadors seran titulars. Gestiona el
+								teu equip i el teu saldo.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA Section -->
+			<section
+				class="text-center bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 border border-primary/20 rounded-lg p-12"
+			>
+				<h2 class="text-3xl font-bold mb-4">Preparat per Començar?</h2>
+				<p class="text-muted-foreground mb-6 max-w-xl mx-auto">
+					Uneix-te a Fantasy Big Three i demostra que tens el millor equip
+					de la NBA.
+				</p>
+				<a href="/mercado">
+					<Button size="lg" client:load> Anar al Mercat </Button>
+				</a>
+			</section>
+		</main>
+	)}
+</Layout>
+{isAuthenticated && (
+	<style>
+	/* Pista de bàsquet */
+	.basketball-court {
+		background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+		border-radius: 8px;
+		padding: 1rem;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	}
+
+	@media (min-width: 640px) {
+		.basketball-court {
+			border-radius: 10px;
+			padding: 1.5rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.basketball-court {
+			border-radius: 12px;
+			padding: 2rem;
+		}
+	}
+
+	.court-container {
+		position: relative;
+		width: 100%;
+		max-width: 800px;
+		height: 380px;
+		margin: 0 auto;
+		background: #ffa500;
+		border: 2px solid #fff;
+		border-radius: 6px;
+		overflow: hidden;
+	}
+
+	@media (min-width: 640px) {
+		.court-container {
+			height: 500px;
+			border-width: 3px;
+			border-radius: 7px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.court-container {
+			height: 580px;
+			border-width: 4px;
+			border-radius: 8px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.court-container {
+			height: 650px;
+		}
+	}
+
+	/* Cistella i backboard */
+	.hoop {
+		position: absolute;
+		top: 10px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 10;
+	}
+
+	@media (min-width: 640px) {
+		.hoop {
+			top: 12px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.hoop {
+			top: 15px;
+		}
+	}
+
+	.backboard {
+		width: 6px;
+		height: 35px;
+		background: #fff;
+		margin: 0 auto 4px;
+		border-radius: 2px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	}
+
+	@media (min-width: 640px) {
+		.backboard {
+			width: 7px;
+			height: 42px;
+			margin-bottom: 5px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.backboard {
+			width: 8px;
+			height: 50px;
+		}
+	}
+
+	.hoop-ring {
+		width: 45px;
+		height: 45px;
+		border: 3px solid #ff6b35;
+		border-radius: 50%;
+		background: transparent;
+		margin: 0 auto;
+		position: relative;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	}
+
+	@media (min-width: 640px) {
+		.hoop-ring {
+			width: 52px;
+			height: 52px;
+			border-width: 3.5px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.hoop-ring {
+			width: 60px;
+			height: 60px;
+			border-width: 4px;
+		}
+	}
+
+	.hoop-ring::before {
+		content: "";
+		position: absolute;
+		width: 38px;
+		height: 38px;
+		border: 1.5px solid #fff;
+		border-radius: 50%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	@media (min-width: 640px) {
+		.hoop-ring::before {
+			width: 44px;
+			height: 44px;
+			border-width: 2px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.hoop-ring::before {
+			width: 50px;
+			height: 50px;
+		}
+	}
+
+	.hoop-ring::after {
+		content: "";
+		position: absolute;
+		width: 3px;
+		height: 3px;
+		background: #fff;
+		border-radius: 50%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	@media (min-width: 768px) {
+		.hoop-ring::after {
+			width: 4px;
+			height: 4px;
+		}
+	}
+
+	/* Àrea gran (paint/restricted area) - rectangle */
+	.paint-area {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 120px;
+		height: 140px;
+		border: 1.5px solid #fff;
+		border-bottom: none;
+		z-index: 2;
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	@media (min-width: 640px) {
+		.paint-area {
+			width: 150px;
+			height: 170px;
+			border-width: 2px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.paint-area {
+			width: 180px;
+			height: 200px;
+		}
+	}
+
+	/* Àrea petita quadrada (low post area) */
+	.low-post-area {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 80px;
+		height: 80px;
+		border: 2px solid #fff;
+		border-top: none;
+		border-radius: 0 0 8px 8px;
+		z-index: 3;
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	/* Línia de tirs lliures */
+	.free-throw-line {
+		position: absolute;
+		top: 140px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 120px;
+		height: 1.5px;
+		background: #fff;
+		z-index: 3;
+	}
+
+	@media (min-width: 640px) {
+		.free-throw-line {
+			top: 170px;
+			width: 150px;
+			height: 2px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.free-throw-line {
+			top: 200px;
+			width: 180px;
+		}
+	}
+
+	/* Cercle de tirs lliures */
+	.free-throw-circle {
+		position: absolute;
+		top: 70px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 120px;
+		height: 120px;
+		border: 1.5px solid #fff;
+		border-radius: 50%;
+		border-top: none;
+		z-index: 2;
+	}
+
+	@media (min-width: 640px) {
+		.free-throw-circle {
+			top: 85px;
+			width: 150px;
+			height: 150px;
+			border-width: 2px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.free-throw-circle {
+			top: 100px;
+			width: 180px;
+			height: 180px;
+		}
+	}
+
+	/* Línia de 3 punts */
+	.three-point-line {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 220px;
+		height: 220px;
+		border: 1.5px solid #fff;
+		border-radius: 0 0 220px 220px;
+		border-top: none;
+		z-index: 1;
+	}
+
+	@media (min-width: 640px) {
+		.three-point-line {
+			width: 270px;
+			height: 270px;
+			border-width: 2px;
+			border-radius: 0 0 270px 270px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.three-point-line {
+			width: 320px;
+			height: 320px;
+			border-radius: 0 0 320px 320px;
+		}
+	}
+
+	/* Línies laterals de la pista */
+	.court-container {
+		background-image: 
+			/* Línia superior */
+			linear-gradient(to right, #fff 0%, #fff 100%),
+			/* Línia inferior */ linear-gradient(to right, #fff 0%, #fff 100%);
+		background-size: 100% 2px;
+		background-position: top, bottom;
+		background-repeat: no-repeat;
+	}
+
+	/* Posicions dels jugadors */
+	.player-position {
+		position: absolute;
+		z-index: 20;
+	}
+
+	.player-slot {
+		width: 110px;
+		height: 110px;
+		background: rgba(255, 255, 255, 0.95);
+		border: 2px solid #ff6b35;
+		border-radius: 8px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		padding: 0.25rem;
+	}
+
+	@media (min-width: 640px) {
+		.player-slot {
+			width: 120px;
+			height: 120px;
+			border-width: 2.5px;
+			border-radius: 10px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.player-slot {
+			width: 140px;
+			height: 140px;
+			border-width: 3px;
+			border-radius: 12px;
+			padding: 0;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.player-slot {
+			width: 160px;
+			height: 160px;
+		}
+	}
+
+	.player-slot:hover {
+		transform: scale(1.05);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+		background: #fff;
+	}
+
+	.player-slot.selected {
+		background: rgba(59, 130, 246, 0.2);
+		border-color: #3b82f6;
+		border-width: 3px;
+		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+	}
+
+	.player-slot.selected:hover {
+		background: rgba(59, 130, 246, 0.3);
+	}
+
+	.position-label {
+		font-weight: bold;
+		font-size: 1rem;
+		color: #ff6b35;
+		margin-bottom: 2px;
+	}
+
+	@media (min-width: 640px) {
+		.position-label {
+			font-size: 1.25rem;
+			margin-bottom: 3px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.position-label {
+			font-size: 1.5rem;
+			margin-bottom: 4px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.position-label {
+			font-size: 1.75rem;
+		}
+	}
+
+	.player-name {
+		font-size: 0.75rem;
+		color: #666;
+		text-align: center;
+		line-height: 1.2;
+		word-break: break-word;
+	}
+
+	@media (min-width: 640px) {
+		.player-name {
+			font-size: 0.875rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.player-name {
+			font-size: 1rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.player-name {
+			font-size: 1.125rem;
+		}
+	}
+
+	/* Posicionament dels jugadors */
+	.player-position.pg {
+		top: 40px;
+		left: 3%;
+	}
+
+	.player-position.sg {
+		top: 40px;
+		right: 3%;
+	}
+
+	.player-position.sf {
+		top: 150px;
+		left: 3%;
+	}
+
+	.player-position.pf {
+		top: 150px;
+		right: 3%;
+	}
+
+	.player-position.c {
+		bottom: 60px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	@media (min-width: 640px) {
+		.player-position.pg {
+			top: 60px;
+			left: 50px;
+		}
+
+		.player-position.sg {
+			top: 60px;
+			right: 50px;
+		}
+
+		.player-position.sf {
+			top: 220px;
+			left: 50px;
+		}
+
+		.player-position.pf {
+			top: 220px;
+			right: 50px;
+		}
+
+		.player-position.c {
+			bottom: 70px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.player-position.pg {
+			top: 70px;
+			left: 80px;
+		}
+
+		.player-position.sg {
+			top: 70px;
+			right: 80px;
+		}
+
+		.player-position.sf {
+			top: 250px;
+			left: 80px;
+		}
+
+		.player-position.pf {
+			top: 250px;
+			right: 80px;
+		}
+
+		.player-position.c {
+			bottom: 80px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.player-position.pg {
+			top: 80px;
+			left: 100px;
+		}
+
+		.player-position.sg {
+			top: 80px;
+			right: 100px;
+		}
+
+		.player-position.sf {
+			top: 280px;
+			left: 100px;
+		}
+
+		.player-position.pf {
+			top: 280px;
+			right: 100px;
+		}
+
+		.player-position.c {
+			bottom: 100px;
+		}
+	}
+
+	/* Zona de suplents */
+	.bench-container {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-radius: 8px;
+		padding: 1rem;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	}
+
+	@media (min-width: 640px) {
+		.bench-container {
+			border-radius: 10px;
+			padding: 1.5rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-container {
+			border-radius: 12px;
+			padding: 2rem;
+		}
+	}
+
+	.bench-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+		gap: 0.75rem;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	@media (min-width: 640px) {
+		.bench-grid {
+			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+			gap: 1rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-grid {
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		}
+	}
+
+	.bench-slot {
+		position: relative;
+	}
+
+	.bench-player-slot {
+		width: 100%;
+		aspect-ratio: 1;
+		background: rgba(255, 255, 255, 0.95);
+		border: 2px solid #667eea;
+		border-radius: 8px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		padding: 0.5rem;
+	}
+
+	@media (min-width: 640px) {
+		.bench-player-slot {
+			border-width: 2.5px;
+			border-radius: 10px;
+			padding: 0.75rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-player-slot {
+			border-width: 3px;
+			border-radius: 12px;
+			padding: 1rem;
+		}
+	}
+
+	.bench-player-slot:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+		background: #fff;
+	}
+
+	.bench-player-slot.selected {
+		background: rgba(59, 130, 246, 0.2);
+		border-color: #3b82f6;
+		border-width: 3px;
+		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+	}
+
+	.bench-player-slot.selected:hover {
+		background: rgba(59, 130, 246, 0.3);
+		transform: translateY(-4px);
+	}
+
+	.bench-label {
+		font-weight: bold;
+		font-size: 0.7rem;
+		color: #667eea;
+		margin-bottom: 4px;
+	}
+
+	@media (min-width: 640px) {
+		.bench-label {
+			font-size: 0.8rem;
+			margin-bottom: 6px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-label {
+			font-size: 0.875rem;
+			margin-bottom: 8px;
+		}
+	}
+
+	.bench-player-name {
+		font-size: 0.625rem;
+		color: #666;
+		text-align: center;
+		line-height: 1.2;
+		word-break: break-word;
+	}
+
+	@media (min-width: 640px) {
+		.bench-player-name {
+			font-size: 0.7rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-player-name {
+			font-size: 0.75rem;
+		}
+	}
+
+	/* Responsive adicional para pantallas muy pequeñas */
+	@media (max-width: 480px) {
+		.basketball-court {
+			padding: 0.75rem;
+		}
+
+		.court-container {
+			height: 400px;
+		}
+
+		.player-position.pg {
+			top: 30px;
+			left: 2%;
+		}
+
+		.player-position.sg {
+			top: 30px;
+			right: 2%;
+		}
+
+		.player-position.sf {
+			top: 140px;
+			left: 2%;
+		}
+
+		.player-position.pf {
+			top: 140px;
+			right: 2%;
+		}
+
+		.player-position.c {
+			bottom: 60px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.player-slot {
+			width: 100px;
+			height: 100px;
+		}
+
+		.position-label {
+			font-size: 1rem;
+		}
+
+		.player-name {
+			font-size: 0.75rem;
+		}
+
+		.bench-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.5rem;
+		}
+
+		.bench-label {
+			font-size: 0.65rem;
+			margin-bottom: 2px;
+		}
+
+		.bench-player-name {
+			font-size: 0.55rem;
+		}
+	}
+
+	/* Estilos base para móvil (sin media query, aplica a todo) */
+	@media (max-width: 639px) {
+		.court-container {
+			min-height: 380px;
+		}
+	}
+
+	/* Player photos */
+	.player-photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 8px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+	}
+
+	.player-slot {
+		position: relative;
+	}
+
+	.player-slot.has-photo .player-name {
+		position: absolute;
+		bottom: 2px;
+		left: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.7);
+		color: #fff;
+		padding: 3px 5px;
+		border-radius: 0 0 8px 8px;
+		font-size: 0.625rem;
+		z-index: 2;
+	}
+
+	@media (min-width: 640px) {
+		.player-slot.has-photo .player-name {
+			font-size: 0.75rem;
+			padding: 4px 6px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.player-slot.has-photo .player-name {
+			font-size: 0.875rem;
+			padding: 5px 8px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.player-slot.has-photo .player-name {
+			font-size: 1rem;
+			padding: 6px 10px;
+		}
+	}
+
+	.bench-player-photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 8px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+	}
+
+	.bench-player-slot {
+		position: relative;
+	}
+
+	.bench-player-slot.has-photo .bench-player-name {
+		position: absolute;
+		bottom: 2px;
+		left: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.7);
+		color: #fff;
+		padding: 2px 4px;
+		border-radius: 0 0 8px 8px;
+		font-size: 0.5rem;
+		z-index: 2;
+	}
+
+	@media (min-width: 640px) {
+		.bench-player-slot.has-photo .bench-player-name {
+			font-size: 0.6rem;
+			padding: 3px 5px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.bench-player-slot.has-photo .bench-player-name {
+			font-size: 0.65rem;
+			padding: 4px 6px;
+		}
+	}
+	</style>
+)}
+
+{isAuthenticated && (
+	<script>
+	// Map positions to court slots
+	const positionMap: { [key: string]: string[] } = {
+		G: ["PG", "SG"],
+		F: ["SF", "PF"],
+		C: ["C"],
+		"G-F": ["PG", "SG", "SF", "PF"],
+		"F-C": ["SF", "PF", "C"],
+	};
+
+	// Available court positions
+	const courtPositions = ["PG", "SG", "SF", "PF", "C"];
+	let usedPositions: string[] = [];
+
+	// Function to find best position for a player
+	function findBestPosition(playerPosition: string | null): string | null {
+		if (!playerPosition) return null;
+
+		// Normalize position
+		const normalizedPos = playerPosition.toUpperCase().trim();
+
+		// Check if position maps to court positions
+		for (const [key, positions] of Object.entries(positionMap)) {
+			if (normalizedPos.includes(key)) {
+				// Find first available position
+				for (const pos of positions) {
+					if (!usedPositions.includes(pos)) {
+						usedPositions.push(pos);
+						return pos;
+					}
+				}
+			}
+		}
+
+		// Fallback: assign to first available position
+		for (const pos of courtPositions) {
+			if (!usedPositions.includes(pos)) {
+				usedPositions.push(pos);
+				return pos;
+			}
+		}
+
+		return null;
+	}
+
+	// Function to assign player to court position
+	function assignPlayerToCourt(player: any, slotIndex: number) {
+		const nameElement = document.getElementById(`starter-${slotIndex}`);
+		const photoElement = document.getElementById(
+			`starter-photo-${slotIndex}`,
+		) as HTMLImageElement;
+		const slotElement = document.querySelector(
+			`[data-slot-index="${slotIndex}"] .player-slot`,
+		) as HTMLElement;
+
+		if (nameElement && player && slotElement) {
+			const playerName =
+				player.players?.full_name ||
+				player.players?.first_name + " " + player.players?.last_name ||
+				"Jugador";
+			nameElement.textContent = playerName;
+
+			if (photoElement && player.players?.photo_url) {
+				photoElement.src = player.players.photo_url;
+				photoElement.alt = playerName;
+				photoElement.style.display = "block";
+				slotElement.classList.add("has-photo");
+			}
+
+			// Store user_player_id in the slot element
+			slotElement.setAttribute("data-user-player-id", player.id.toString());
+			slotElement.setAttribute("data-player-id", player.players?.id?.toString() || "");
+			slotElement.style.cursor = "pointer";
+		} else if (slotElement) {
+			// Empty slot - remove clickability
+			slotElement.removeAttribute("data-user-player-id");
+			slotElement.removeAttribute("data-player-id");
+			slotElement.style.cursor = "default";
+		}
+	}
+
+	// Function to create bench slot HTML
+	function createBenchSlotHTML(benchIndex: number, player: any): string {
+		const playerName =
+			player.players?.full_name ||
+			player.players?.first_name + " " + player.players?.last_name ||
+			"Jugador";
+		const photoUrl = player.players?.photo_url || "";
+		const hasPhoto = !!photoUrl;
+		const userPlayerId = player.id || "";
+
+		return `
+			<div class="bench-slot" data-bench-index="${benchIndex}">
+				<div class="bench-player-slot ${hasPhoto ? "has-photo" : ""}" 
+					data-user-player-id="${userPlayerId}"
+					data-player-id="${player.players?.id || ""}"
+					style="cursor: pointer;">
+					<span class="bench-label">Suplent ${benchIndex + 1}</span>
+					<span class="bench-player-name">${playerName}</span>
+					${hasPhoto ? `<img class="bench-player-photo" src="${photoUrl}" alt="${playerName}" />` : ""}
+				</div>
+			</div>
+		`;
+	}
+
+	// Function to clear all slots
+	function clearAllSlots() {
+		// Clear starters
+		for (let i = 0; i < 5; i++) {
+			const nameElement = document.getElementById(`starter-${i}`);
+			const photoElement = document.getElementById(
+				`starter-photo-${i}`,
+			) as HTMLImageElement;
+			const slotElement = document.querySelector(
+				`[data-slot-index="${i}"] .player-slot`,
+			) as HTMLElement;
+			const slotContainer = document.querySelector(
+				`[data-slot-index="${i}"]`,
+			) as HTMLElement;
+
+			if (nameElement) nameElement.textContent = "-";
+			if (photoElement) {
+				photoElement.src = "";
+				photoElement.style.display = "none";
+			}
+			if (slotElement) {
+				slotElement.classList.remove("has-photo", "selected");
+				// Reset inline styles
+				slotElement.style.pointerEvents = "";
+				slotElement.style.opacity = "";
+				slotElement.style.cursor = "";
+				slotElement.removeAttribute("data-user-player-id");
+				slotElement.removeAttribute("data-player-id");
+			}
+			// Make sure slot container is visible initially
+			if (slotContainer) {
+				slotContainer.style.display = "";
+			}
+		}
+
+		// Clear bench - remove all bench slots
+		const benchGrid = document.getElementById("bench-grid");
+		if (benchGrid) {
+			benchGrid.innerHTML = "";
+		}
+
+		// Hide bench section
+		const benchSection = document.getElementById("bench-section");
+		if (benchSection) {
+			benchSection.style.display = "none";
+		}
+	}
+
+	// Function to load and display user players
+	async function loadUserPlayers() {
+		try {
+			const response = await fetch(
+				"/api/user-players/my-players?active_only=true",
+			);
+			const data = await response.json();
+
+			if (data.error) {
+				console.error("Error loading players:", data.error);
+				return;
+			}
+
+			const players = data.data || [];
+
+			// Separate starters and bench players
+			const starters = players.filter((p: any) => p.is_starter === true);
+			const benchPlayers = players.filter(
+				(p: any) => p.is_starter === false,
+			);
+
+			// Clear all slots first
+			clearAllSlots();
+			usedPositions = [];
+
+			// Assign starters to court positions (only show slots with players)
+			starters.forEach((player: any, index: number) => {
+				if (index < 5) {
+					const playerPos = player.players?.position || null;
+					const assignedPos = findBestPosition(playerPos);
+
+					if (assignedPos) {
+						// Find slot index for this position
+						const positionSlots: { [key: string]: number } = {
+							PG: 0,
+							SG: 1,
+							SF: 2,
+							PF: 3,
+							C: 4,
+						};
+						const slotIndex = positionSlots[assignedPos];
+						assignPlayerToCourt(player, slotIndex);
+					} else {
+						// If no position found, assign in order
+						assignPlayerToCourt(player, index);
+					}
+				}
+			});
+
+			// Hide empty starter slots and ensure visible slots are properly displayed
+			for (let i = 0; i < 5; i++) {
+				const slotElement = document.querySelector(
+					`[data-slot-index="${i}"]`,
+				) as HTMLElement;
+				const nameElement = document.getElementById(`starter-${i}`);
+				const slotPlayerElement = document.querySelector(
+					`[data-slot-index="${i}"] .player-slot`,
+				) as HTMLElement;
+				
+				if (slotElement && nameElement) {
+					if (nameElement.textContent === "-" || !slotPlayerElement?.getAttribute("data-user-player-id")) {
+						// Empty slot - hide it
+						slotElement.style.display = "none";
+					} else {
+						// Has player - make sure it's visible and styles are reset
+						slotElement.style.display = "";
+						if (slotPlayerElement) {
+							slotPlayerElement.style.pointerEvents = "";
+							slotPlayerElement.style.opacity = "";
+							slotPlayerElement.style.cursor = "pointer";
+						}
+					}
+				} else if (slotElement) {
+					slotElement.style.display = "";
+				}
+			}
+
+			// Assign bench players (only create slots for players that exist)
+			const benchGrid = document.getElementById("bench-grid");
+			const benchSection = document.getElementById("bench-section");
+
+			if (benchPlayers.length > 0 && benchGrid && benchSection) {
+				benchGrid.innerHTML = "";
+				benchPlayers.forEach((player: any, index: number) => {
+					benchGrid.innerHTML += createBenchSlotHTML(index, player);
+				});
+				benchSection.style.display = "block";
+			} else if (benchSection) {
+				benchSection.style.display = "none";
+			}
+
+			// Setup event listeners after players are loaded
+			setTimeout(() => {
+				setupPlayerSlotListeners();
+				clearSelection(); // Clear selection when players reload
+				
+				// Ensure all slots are properly reset after reload
+				document.querySelectorAll(".player-slot, .bench-player-slot").forEach((slot) => {
+					const slotElement = slot as HTMLElement;
+					slotElement.style.pointerEvents = "";
+					slotElement.style.opacity = "";
+					if (slotElement.getAttribute("data-user-player-id")) {
+						slotElement.style.cursor = "pointer";
+					}
+				});
+			}, 50);
+		} catch (error: any) {
+			console.error("Error loading user players:", error);
+		}
+	}
+
+	// Selected player state
+	let selectedStarter: { userPlayerId: number; slotIndex: number; slotElement: HTMLElement } | null = null;
+
+	// Function to clear selection
+	function clearSelection() {
+		if (selectedStarter) {
+			selectedStarter.slotElement.classList.remove("selected");
+			selectedStarter = null;
+		}
+		// Clear any selected bench players
+		document.querySelectorAll(".bench-player-slot.selected").forEach((slot) => {
+			slot.classList.remove("selected");
+		});
+	}
+
+	// Function to select a starter
+	function selectStarter(slotIndex: number, userPlayerId: number) {
+		const slotElement = document.querySelector(
+			`[data-slot-index="${slotIndex}"] .player-slot`,
+		) as HTMLElement;
+
+		if (!slotElement || !userPlayerId) return;
+
+		// If clicking the same starter, deselect
+		if (selectedStarter?.userPlayerId === userPlayerId) {
+			clearSelection();
+			return;
+		}
+
+		// Clear previous selection
+		clearSelection();
+
+		// Select new starter
+		selectedStarter = {
+			userPlayerId,
+			slotIndex,
+			slotElement,
+		};
+		slotElement.classList.add("selected");
+	}
+
+	// Function to select a bench player and swap with selected starter
+	async function selectBenchPlayer(userPlayerId: number) {
+		if (!selectedStarter) {
+			// If no starter selected, just select the bench player (visual feedback only)
+			const benchSlot = document.querySelector(
+				`.bench-player-slot[data-user-player-id="${userPlayerId}"]`,
+			) as HTMLElement;
+			if (benchSlot) {
+				clearSelection();
+				benchSlot.classList.add("selected");
+				// Auto-deselect after a moment
+				setTimeout(() => {
+					benchSlot.classList.remove("selected");
+				}, 1000);
+			}
+			return;
+		}
+
+		// Swap starter and bench player
+		const benchSlot = document.querySelector(
+			`.bench-player-slot[data-user-player-id="${userPlayerId}"]`,
+		) as HTMLElement;
+
+		if (!benchSlot) return;
+
+		try {
+			// Disable interactions during swap
+			document.querySelectorAll(".player-slot, .bench-player-slot").forEach((slot) => {
+				(slot as HTMLElement).style.pointerEvents = "none";
+				(slot as HTMLElement).style.opacity = "0.6";
+			});
+
+			// Update starter to bench
+			const starterResponse = await fetch("/api/user-players/update-starter", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					user_player_id: selectedStarter.userPlayerId,
+					is_starter: false,
+				}),
+			});
+
+			const starterData = await starterResponse.json();
+
+			if (starterData.error) {
+				throw new Error(starterData.error);
+			}
+
+			// Update bench player to starter
+			const benchResponse = await fetch("/api/user-players/update-starter", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					user_player_id: userPlayerId,
+					is_starter: true,
+				}),
+			});
+
+			const benchData = await benchResponse.json();
+
+			if (benchData.error) {
+				throw new Error(benchData.error);
+			}
+
+			// Reload players to reflect changes
+			clearSelection();
+			await loadUserPlayers();
+
+			// Restore interactions after reload (in case loadUserPlayers recreates elements)
+			setTimeout(() => {
+				document.querySelectorAll(".player-slot, .bench-player-slot").forEach((slot) => {
+					(slot as HTMLElement).style.pointerEvents = "";
+					(slot as HTMLElement).style.opacity = "";
+				});
+			}, 100);
+
+			// Notify navbar to refresh balance (in case of any updates)
+			window.dispatchEvent(new Event("balanceUpdated"));
+
+			// Show success message
+			if (typeof window !== "undefined") {
+				const toastFn = (window as any).toast;
+				if (toastFn) {
+					toastFn.success("Jugadors intercanviats!", {
+						description: "Els canvis s'han aplicat correctament",
+						duration: 3000,
+					});
+				}
+			}
+		} catch (error: any) {
+			console.error("Error swapping players:", error);
+			
+			// Show error message
+			if (typeof window !== "undefined") {
+				const toastFn = (window as any).toast;
+				if (toastFn) {
+					toastFn.error("Error en l'intercanvi", {
+						description: error.message || "No s'ha pogut intercanviar els jugadors",
+						duration: 4000,
+					});
+				}
+			}
+
+			// Re-enable interactions
+			document.querySelectorAll(".player-slot, .bench-player-slot").forEach((slot) => {
+				(slot as HTMLElement).style.pointerEvents = "";
+				(slot as HTMLElement).style.opacity = "";
+			});
+		}
+	}
+
+	// Function to setup event listeners for player slots using event delegation
+	function setupPlayerSlotListeners() {
+		// Use event delegation on the court container
+		// Remove existing listener if any by checking for a data attribute
+		const courtContainer = document.querySelector(".basketball-court") as HTMLElement;
+		if (courtContainer && !courtContainer.hasAttribute("data-listener-setup")) {
+			courtContainer.setAttribute("data-listener-setup", "true");
+			courtContainer.addEventListener("click", (e) => {
+				const target = e.target as HTMLElement;
+				const playerSlot = target.closest(".player-slot") as HTMLElement;
+				
+				if (playerSlot) {
+					const slotIndexAttr = playerSlot.closest("[data-slot-index]")?.getAttribute("data-slot-index");
+					const userPlayerId = playerSlot.getAttribute("data-user-player-id");
+					
+					if (slotIndexAttr && userPlayerId) {
+						const slotIndex = parseInt(slotIndexAttr);
+						e.stopPropagation();
+						selectStarter(slotIndex, parseInt(userPlayerId));
+					}
+				}
+			});
+		}
+
+		// Use event delegation on the bench grid
+		const benchGrid = document.getElementById("bench-grid");
+		if (benchGrid && !benchGrid.hasAttribute("data-listener-setup")) {
+			benchGrid.setAttribute("data-listener-setup", "true");
+			benchGrid.addEventListener("click", (e) => {
+				const target = e.target as HTMLElement;
+				const benchSlot = target.closest(".bench-player-slot") as HTMLElement;
+				
+				if (benchSlot) {
+					const userPlayerId = benchSlot.getAttribute("data-user-player-id");
+					
+					if (userPlayerId) {
+						e.stopPropagation();
+						selectBenchPlayer(parseInt(userPlayerId));
+					}
+				}
+			});
+		}
+	}
+
+	// Load players on page load
+	document.addEventListener("DOMContentLoaded", () => {
+		loadUserPlayers();
+
+		// Listen for balance updates to refresh players
+		window.addEventListener("balanceUpdated", () => {
+			setTimeout(() => loadUserPlayers(), 500);
+		});
+	});
+	</script>
+)}

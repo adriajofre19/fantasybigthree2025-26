@@ -1,0 +1,155 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar";
+import { Button } from "@/components/ui/button";
+---
+
+<Layout title="Fantasy Big Three - Home">
+    <Navbar client:load />
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16">
+            <h1
+                class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent"
+            >
+                Fantasy Big Three
+            </h1>
+            <p
+                class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+            >
+                Construïx el teu equip de somni amb els millors jugadors de la
+                NBA temporada 2025-2026
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/mercado">
+                    <Button size="lg" className="w-full sm:w-auto" client:load>
+                        Començar a Jugar
+                    </Button>
+                </a>
+                <a href="/about">
+                    <Button
+                        size="lg"
+                        variant="outline"
+                        className="w-full sm:w-auto"
+                        client:load
+                    >
+                        Més Informació
+                    </Button>
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div
+                class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+            >
+                <div class="text-4xl mb-4">🏀</div>
+                <h2 class="text-xl font-semibold mb-2">Compra Jugadors</h2>
+                <p class="text-muted-foreground">
+                    Explora el mercat i compra els millors jugadors de la NBA
+                    per formar el teu equip.
+                </p>
+            </div>
+            <div
+                class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+            >
+                <div class="text-4xl mb-4">⭐</div>
+                <h2 class="text-xl font-semibold mb-2">Equip Titular</h2>
+                <p class="text-muted-foreground">
+                    Els primers 5 jugadors que compris seran automàticament els
+                    teus titulars.
+                </p>
+            </div>
+            <div
+                class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow"
+            >
+                <div class="text-4xl mb-4">💰</div>
+                <h2 class="text-xl font-semibold mb-2">Gestiona el Saldo</h2>
+                <p class="text-muted-foreground">
+                    Gestiona el teu pressupost i construeix l'equip perfecte amb
+                    els recursos disponibles.
+                </p>
+            </div>
+        </section>
+
+        <!-- How to Play Section -->
+        <section class="bg-card border border-border rounded-lg p-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center">Com Jugar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex gap-4">
+                    <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+                    >
+                        1
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Inicia Sessió</h3>
+                        <p class="text-muted-foreground">
+                            Fes login amb Google per començar a jugar i obtenir
+                            el teu saldo inicial.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+                    >
+                        2
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Explora el Mercat</h3>
+                        <p class="text-muted-foreground">
+                            Visita el mercat per veure tots els jugadors
+                            disponibles i els seus preus.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+                    >
+                        3
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Compra Jugadors</h3>
+                        <p class="text-muted-foreground">
+                            Selecciona els jugadors que vols i compra'ls per
+                            afegir-los al teu equip.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold"
+                    >
+                        4
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">
+                            Gestiona el Teu Equip
+                        </h3>
+                        <p class="text-muted-foreground">
+                            Els primers 5 jugadors seran titulars. Gestiona el
+                            teu equip i el teu saldo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section
+            class="text-center bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 border border-primary/20 rounded-lg p-12"
+        >
+            <h2 class="text-3xl font-bold mb-4">Preparat per Començar?</h2>
+            <p class="text-muted-foreground mb-6 max-w-xl mx-auto">
+                Uneix-te a Fantasy Big Three i demostra que tens el millor equip
+                de la NBA.
+            </p>
+            <a href="/mercado">
+                <Button size="lg" client:load> Anar al Mercat </Button>
+            </a>
+        </section>
+    </main>
+</Layout>

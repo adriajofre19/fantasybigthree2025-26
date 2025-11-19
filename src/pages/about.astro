@@ -1,0 +1,152 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar";
+---
+
+<Layout title="About - Fantasy Big Three">
+	<Navbar client:load />
+	<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+		<div class="flex justify-between items-center mb-6">
+			<div>
+				<h1 class="text-3xl font-bold">
+					About - Jugadors NBA 2025-2026
+				</h1>
+				<p class="mt-2 text-muted-foreground">
+					Aquesta pàgina mostra tots els jugadors de la NBA de la
+					temporada 2025-2026.
+				</p>
+			</div>
+			<button
+				id="sync-button"
+				class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+			>
+				Sincronitzar jugadors
+			</button>
+		</div>
+		<div id="sync-status" class="mb-4"></div>
+		<div id="players-container" class="mt-8">
+			<p class="text-muted-foreground">Carregant jugadors...</p>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	async function loadPlayers() {
+		const container = document.getElementById("players-container");
+		if (!container) return;
+
+		try {
+			const response = await fetch("/api/players");
+			const data = await response.json();
+
+			if (data.error) {
+				container.innerHTML = `<p class="text-destructive">Error: ${data.error}</p>`;
+				return;
+			}
+
+			if (data.players && data.players.length > 0) {
+				const table = `
+					<div class="overflow-x-auto">
+						<table class="min-w-full divide-y divide-border">
+							<thead class="bg-muted">
+								<tr>
+									<th class="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">Foto</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">Nom</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">Equip</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">Posició</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">Estat</th>
+								</tr>
+							</thead>
+							<tbody class="bg-background divide-y divide-border">
+								${data.players
+									.map(
+										(player: any) => `
+									<tr>
+										<td class="px-6 py-4 whitespace-nowrap">
+											${
+												player.photo_url
+													? `
+												<img 
+													src="${player.photo_url}" 
+													alt="${player.full_name || player.first_name + " " + player.last_name}"
+													class="h-12 w-12 rounded-full object-cover"
+													onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'48\\' height=\\'48\\'%3E%3Crect fill=\\'%23ddd\\' width=\\'48\\' height=\\'48\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'sans-serif\\' font-size=\\'14\\' dy=\\'15\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\'%3E${(player.first_name?.[0] || "") + (player.last_name?.[0] || "")}%3C/text%3E%3C/svg%3E'"
+												/>
+											`
+													: `
+												<div class="h-12 w-12 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
+													${(player.first_name?.[0] || "") + (player.last_name?.[0] || "")}
+												</div>
+											`
+											}
+										</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">${player.full_name || player.first_name + " " + player.last_name}</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">${player.team_name || "N/A"}</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">${player.position || "N/A"}</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm">
+											<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${player.is_active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}">
+												${player.is_active ? "Actiu" : "Inactiu"}
+											</span>
+										</td>
+									</tr>
+								`,
+									)
+									.join("")}
+							</tbody>
+						</table>
+					</div>
+					<p class="mt-4 text-sm text-muted-foreground">Total: ${data.players.length} jugadors</p>
+				`;
+				container.innerHTML = table;
+			} else {
+				container.innerHTML =
+					'<p class="text-muted-foreground">No hi ha jugadors disponibles. Executa la sincronització primer.</p>';
+			}
+		} catch (error: any) {
+			container.innerHTML = `<p class="text-destructive">Error carregant jugadors: ${error.message || error}</p>`;
+		}
+	}
+
+	async function syncPlayers() {
+		const syncButton = document.getElementById(
+			"sync-button",
+		) as HTMLButtonElement;
+		const statusDiv = document.getElementById("sync-status");
+
+		if (!syncButton || !statusDiv) return;
+
+		syncButton.disabled = true;
+		syncButton.textContent = "Sincronitzant...";
+		statusDiv.innerHTML =
+			'<p class="text-muted-foreground">Sincronitzant jugadors de la NBA...</p>';
+
+		try {
+			const response = await fetch("/api/players/sync", {
+				method: "POST",
+			});
+			const data = await response.json();
+
+			if (data.error) {
+				statusDiv.innerHTML = `<p class="text-destructive">Error: ${data.error}</p>`;
+			} else {
+				statusDiv.innerHTML = `<p class="text-green-600">${data.message || "Sincronització completada!"}</p>`;
+				// Recarregar la llista de jugadors
+				await loadPlayers();
+			}
+		} catch (error: any) {
+			statusDiv.innerHTML = `<p class="text-destructive">Error: ${error.message || error}</p>`;
+		} finally {
+			syncButton.disabled = false;
+			syncButton.textContent = "Sincronitzar jugadors";
+		}
+	}
+
+	// Event listeners
+	document.addEventListener("DOMContentLoaded", () => {
+		const syncButton = document.getElementById("sync-button");
+		if (syncButton) {
+			syncButton.addEventListener("click", syncPlayers);
+		}
+		loadPlayers();
+	});
+</script>
